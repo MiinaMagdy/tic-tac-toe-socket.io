@@ -3,11 +3,14 @@ const app = express();
 
 const path = require("path");
 const http = require("http");
-const { Server } = require("socket.io");
-
 const server = http.createServer(app);
 
-const io = new Server(server);
+const { Server } = require("socket.io");
+const io = new Server(server, {
+    cors: {
+        origin: "*",
+    }
+});
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, "home.html"));
@@ -34,12 +37,11 @@ io.on("connection", (socket) => {
     socket.on("move", (data) => {
         socket.to(data.room).emit("move", data);
     });
-
     socket.on("disconnect", () => {
         console.log("A user disconnected");
     });
 });
 
-app.listen(3000, () => {
+server.listen(3000, () => {
     console.log("Listening on port 3000");
 });
