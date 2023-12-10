@@ -30,7 +30,7 @@ io.on("connection", (socket) => {
         if (rooms.includes(parseInt(room))) {
             socket.join(room);
             console.log(room);
-            socket.emit("room joined", room);
+            socket.to(room).emit("room joined", room);
             rooms = rooms.filter(r => r !== room);
         } else {
             socket.emit("room not found");
