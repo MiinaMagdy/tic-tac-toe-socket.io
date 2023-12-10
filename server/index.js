@@ -22,6 +22,8 @@ io.on("connection", (socket) => {
     console.log("A user connected");
     socket.on("new game", () => {
         let room = Math.floor(Math.random() * 1000000);
+        socket.inTurn = true;
+        socket.player = "X";
         rooms.push(room);
         socket.join(room);
         socket.emit("room created", room);
@@ -30,6 +32,8 @@ io.on("connection", (socket) => {
         room = parseInt(room);
         if (rooms.includes(room)) {
             socket.join(room);
+            socket.inTurn = false;
+            socket.player = "O";
             console.log(room);
             io.to(room).emit("room joined", room);
             rooms = rooms.filter(r => r !== room);
