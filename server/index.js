@@ -27,7 +27,8 @@ io.on("connection", (socket) => {
         socket.emit("room created", room);
     });
     socket.on("join game", (room) => {
-        if (rooms.includes(parseInt(room))) {
+        room = parseInt(room);
+        if (rooms.includes(room)) {
             socket.join(room);
             console.log(room);
             socket.to(room).emit("room joined", room);
