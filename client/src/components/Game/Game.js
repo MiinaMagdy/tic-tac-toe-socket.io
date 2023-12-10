@@ -1,6 +1,7 @@
 import React from "react";
 import "./Game.css";
 import { socket } from "../../Socket";
+import { useLocation } from "react-router-dom";
 
 function X() {
     return (
@@ -20,34 +21,35 @@ function O() {
 }
 
 function Game() {
+    const {room} = useLocation().state;
     const [board, setBoard] = React.useState([
         [null, null, null],
         [null, null, null],
         [null, null, null],
     ]);
 
-    const [turn, setTurn] = React.useState(true); // true for "X", false for "O"
 
     function handleClick(row, col) {
+        if (!socket.inTurn) return;
         if (board[row][col] === null) {
             let newBoard = [...board];
-            newBoard[row][col] = turn ? "X" : "O";
+            newBoard[row][col] = socket.player;
             setBoard(newBoard);
-            setTurn(!turn); // Switch turns
-            socket.emit("move", newBoard);
+            socket.emit("move",{room: room, board: newBoard});
         }
     }
 
     React.useEffect(() => {
-        socket.on("move", (newBoard) => {
-            setBoard(newBoard);
-            setTurn(!turn); // Switch turns
+        socket.on("move", (data) => {
+            setBoard(data.board);
+            socket.inTurn = !socket.inTurn;
         });
-    }, [turn]);
+    }, []);
 
     return (
         <div className="game">
             <h1>Game</h1>
+            <p>Room code: {room}</p>
             <div className="board">
                 {board.map((row, rowIndex) => (
                     <div className="row" key={rowIndex}>

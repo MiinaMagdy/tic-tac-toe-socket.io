@@ -22,11 +22,9 @@ io.on("connection", (socket) => {
     console.log("A user connected");
     socket.on("new game", () => {
         let room = Math.floor(Math.random() * 1000000);
-        socket.inTurn = true;
-        socket.player = "X";
         rooms.push(room);
         socket.join(room);
-        socket.emit("room created", room);
+        socket.emit("room created", {room: room, player: "X", inTurn: true});
     });
     socket.on("join game", (room) => {
         room = parseInt(room);
@@ -35,6 +33,7 @@ io.on("connection", (socket) => {
             socket.inTurn = false;
             socket.player = "O";
             console.log(room);
+            socket.emit("second player", {room: room, player: "O", inTurn: false});
             io.to(room).emit("room joined", room);
             rooms = rooms.filter(r => r !== room);
         } else {
@@ -43,7 +42,7 @@ io.on("connection", (socket) => {
         }
     });
     socket.on("move", (data) => {
-        socket.to(data.room).emit("move", data);
+        io.to(data.room).emit("move", data);
     });
     socket.on("disconnect", () => {
         console.log("A user disconnected");
