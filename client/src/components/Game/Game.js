@@ -21,7 +21,7 @@ function O() {
 }
 
 function Game() {
-    const {room} = useLocation().state;
+    const { room } = useLocation().state;
     const [board, setBoard] = React.useState([
         [null, null, null],
         [null, null, null],
@@ -35,7 +35,7 @@ function Game() {
             let newBoard = [...board];
             newBoard[row][col] = socket.player;
             setBoard(newBoard);
-            socket.emit("move",{room: room, board: newBoard});
+            socket.emit("move", { room: room, board: newBoard });
         }
     }
 
@@ -50,6 +50,8 @@ function Game() {
         <div className="game">
             <h1>Game</h1>
             <p>Room code: {room}</p>
+            <p>You Play with: {socket.player}</p>
+            <p>Turn: {socket.inTurn ? "Your Turn" : "Opponent's Turn"}</p>
             <div className="board">
                 {board.map((row, rowIndex) => (
                     <div className="row" key={rowIndex}>
