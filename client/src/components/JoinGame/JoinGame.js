@@ -1,8 +1,7 @@
 import React from "react";
-import {io} from "socket.io-client";
+import { socket } from "../../Socket";
 import { useNavigate } from "react-router";
 function JoinGame() {
-    const socket = io("http://localhost:3000");
     const navigate = useNavigate();
     const [room, setRoom] = React.useState("");
     const joinGame = () => {

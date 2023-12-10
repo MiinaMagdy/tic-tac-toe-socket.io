@@ -31,7 +31,7 @@ io.on("connection", (socket) => {
         if (rooms.includes(room)) {
             socket.join(room);
             console.log(room);
-            socket.to(room).emit("room joined", room);
+            io.to(room).emit("room joined", room);
             rooms = rooms.filter(r => r !== room);
         } else {
             socket.emit("room not found");

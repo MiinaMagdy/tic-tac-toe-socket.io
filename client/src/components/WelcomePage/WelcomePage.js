@@ -1,11 +1,10 @@
 import React from "react";
 import "./WelcomePage.css";
-import {io} from "socket.io-client";
+import { socket } from "../../Socket";
 import { useNavigate } from "react-router";
 // X O WelcomePage
 function WelcomePage() {
     const navigate = useNavigate();
-    const socket = io("http://localhost:3000");
 
     const newGame = () => {
         socket.emit("new game");
