@@ -1,29 +1,20 @@
-import logo from './logo.svg';
 import './App.css';
-import { useEffect } from 'react';
-import  {io} from 'socket.io-client';
-
+import WelcomePage from './components/WelcomePage/WelcomePage';
+import JoinGame from './components/JoinGame/JoinGame';
+import WaitingForOthers from './components/WaitingForOthers/WaitingForOthers';
+import Game from './components/Game/Game';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 function App() {
-
-  const connectSocket = async () => {
-    const socket = io('http://localhost:3000');
-
-    socket.on('connect', () => {
-      console.log('Connected to the server');
-    });
-
-    socket.on('disconnect', () => {
-      console.log('Disconnected from the server');
-    });
-  };
-
-  useEffect(() => {
-    connectSocket();
-  } ,[]);
-
   return (
     <div className="App">
-      <h1> HELLO WORLD </h1>
+      <Router>
+        <Routes>
+          <Route path="/" element={<WelcomePage />} />
+          <Route path="/JoinGame" element={<JoinGame />} />
+          <Route path="/WaitingForOthers" element={<WaitingForOthers />} />
+          <Route path="/Game" element={<Game />} />
+        </Routes>
+      </Router>
     </div>
   );
 }

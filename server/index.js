@@ -27,11 +27,14 @@ io.on("connection", (socket) => {
         socket.emit("room created", room);
     });
     socket.on("join game", (room) => {
-        if (rooms.includes(room)) {
+        if (rooms.includes(parseInt(room))) {
             socket.join(room);
+            console.log(room);
             socket.emit("room joined", room);
+            rooms = rooms.filter(r => r !== room);
         } else {
             socket.emit("room not found");
+            console.log("Room not found");
         }
     });
     socket.on("move", (data) => {
