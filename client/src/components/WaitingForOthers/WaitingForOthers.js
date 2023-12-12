@@ -36,18 +36,15 @@ function WaitingForOthers() {
         className="room-code"
         onClick={() => {
           navigator.clipboard.writeText(room);
-          const copied = document.querySelector(".copied");
-          copied.style.display = "block";
+          const copied = document.querySelector(".room-code");
+          copied.innerHTML = "Copied!";
           setTimeout(() => {
-            copied.style.display = "none";
+            copied.innerHTML = `Room code: ${room}`;
           }, 1000);
         }}
       >
         <p>Room code:</p>
         <p>{room}</p>
-      </div>
-      <div className="copied" style={{ display: "none" }}>
-        <p>Copied!</p>
       </div>
     </div>
   );
