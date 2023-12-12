@@ -8,11 +8,13 @@ function JoinGame() {
         console.log(room);
         socket.emit("join game", room);
     }
-    socket.on("room joined", (room) => {
+    socket.on("room joined", (data) => {
         console.log("room joined");
-        socket.inTurn = false;
         socket.player = "O";
-        navigate("/Game", { state: { room: room } });
+    });
+
+    socket.on("start game", (gameData) => {
+        navigate("/Game", { state: gameData });
     });
 
     return (
