@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Game.css";
 import { socket } from "../../Socket";
 import { useLocation } from "react-router-dom";
@@ -14,34 +14,35 @@ function X() {
 
 function O() {
     return (
-        <div className="o">
-
-        </div>
+        <div className="o"></div>
     );
 }
 
 function Game() {
-    // const { initialGameData } = useLocation().state;
-    const [gameData, setGameData] = React.useState(useLocation().state);
+    const locationState = useLocation().state;
+    const [gameData, setGameData] = useState(locationState);
+
+    useEffect(() => {
+        socket.on("move", (newData) => {
+            setGameData(newData);
+        });
+
+        // Clean up on component unmount
+        // return () => {
+        //     socket.off("move");
+        // };
+    }, []);
 
     function handleClick(row, col) {
         if (gameData.currentPlayer !== socket.player) return;
         if (gameData.board[row][col] === null) {
-            let newGameData = { ...gameData };
+            const newGameData = { ...gameData };
             newGameData.board = [...gameData.board];
             newGameData.board[row][col] = socket.player;
             setGameData(newGameData);
             socket.emit("move", newGameData);
         }
     }
-
-    React.useEffect(() => {
-        // console.log(initialGameData);
-        // setGameData(initialGameData);
-        socket.on("move", (newData) => {
-            setGameData(newData);
-        });
-    });
 
     return (
         <div className="game">

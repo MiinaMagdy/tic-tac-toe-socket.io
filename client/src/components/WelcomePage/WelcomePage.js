@@ -1,19 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./WelcomePage.css";
 import { socket } from "../../Socket";
 import { useNavigate } from "react-router";
-// X O WelcomePage
+
 function WelcomePage() {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const handleRoomCreated = (room) => {
+            socket.player = "X";
+            navigate("/WaitingForOthers", { state: { room } });
+        };
+
+        // Set up socket event listener
+        socket.on("room created", handleRoomCreated);
+
+        // Clean up on component unmount
+        // return () => {
+        //     socket.off("room created", handleRoomCreated);
+        // };
+    }, [navigate]);
 
     const newGame = () => {
         socket.emit("new game");
     }
-
-    socket.on("room created", (room) => {
-        socket.player = "X";
-        navigate("/WaitingForOthers", { state: { room: room } });
-    });
 
     const joinGame = () => {
         navigate("/JoinGame");

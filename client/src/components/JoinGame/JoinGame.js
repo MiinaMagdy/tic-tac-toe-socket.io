@@ -1,21 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { socket } from "../../Socket";
 import { useNavigate } from "react-router";
+
 function JoinGame() {
     const navigate = useNavigate();
-    const [room, setRoom] = React.useState("");
+    const [room, setRoom] = useState("");
+
+    useEffect(() => {
+        const handleRoomJoined = () => {
+            socket.player = "O";
+        };
+
+        const handleStartGame = (gameData) => {
+            navigate("/Game", { state: gameData });
+        };
+
+        // Set up socket event listeners
+        socket.on("room joined", handleRoomJoined);
+        socket.on("start game", handleStartGame);
+
+        // Clean up on component unmount
+        // return () => {
+        //     socket.off("room joined", handleRoomJoined);
+        //     socket.off("start game", handleStartGame);
+        // };
+    }, [navigate]);
+
     const joinGame = () => {
         console.log(room);
         socket.emit("join game", room);
     }
-    socket.on("room joined", (data) => {
-        console.log("room joined");
-        socket.player = "O";
-    });
-
-    socket.on("start game", (gameData) => {
-        navigate("/Game", { state: gameData });
-    });
 
     return (
         <div className="join-game">
