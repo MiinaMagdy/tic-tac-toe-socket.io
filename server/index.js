@@ -16,27 +16,34 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, "home.html"));
 });
 
+function createGameData(room) {
+    return {
+        board: Array(3).fill(null).map(() => Array(3).fill(null)),
+        currentPlayer: 'X',
+        winner: null,
+        room: room
+    };
+}
 let rooms = [];
 
 io.on("connection", (socket) => {
     console.log("A user connected");
     socket.on("new game", () => {
         let room = Math.floor(Math.random() * 1000000);
-        socket.inTurn = true;
-        socket.player = "X";
-        rooms.push(room);
-        console.log(room);
+        rooms[room] = createGameData(room);
+        console.log(rooms, room in rooms);
         socket.join(room);
         socket.emit("room created", room);
     });
     socket.on("join game", (room) => {
         room = parseInt(room);
-        if (rooms.includes(room)) {
+        console.log(room);
+        if (room in rooms) {
             socket.join(room);
-            socket.inTurn = false;
-            socket.player = "O";
             console.log(room);
-            io.to(room).emit("room joined", room);
+            socket.emit("room joined");
+            console.log(rooms[room]);
+            io.to(room).emit("start game", rooms[room]);
             rooms = rooms.filter(r => r !== room);
         } else {
             socket.emit("room not found");
@@ -44,12 +51,43 @@ io.on("connection", (socket) => {
         }
     });
     socket.on("move", (data) => {
+        data.winner = checkWin(data.board);
+        if (data.winner !== null) {
+            console.log("Winner: ", data.winner);
+            io.to(data.room).emit("game over", data);
+            return;
+        }
+        data.currentPlayer = data.currentPlayer === "X" ? "O" : "X";
         io.to(data.room).emit("move", data);
     });
     socket.on("disconnect", () => {
         console.log("A user disconnected");
     });
 });
+
+function checkWin(board) {
+    let winner = null;
+    // Check rows
+    for (let i = 0; i < 3; i++) {
+        if (board[i][0] !== null && board[i][0] === board[i][1] && board[i][1] === board[i][2]) {
+            winner = board[i][0];
+        }
+    }
+    // Check columns
+    for (let i = 0; i < 3; i++) {
+        if (board[0][i] !== null && board[0][i] === board[1][i] && board[1][i] === board[2][i]) {
+            winner = board[0][i];
+        }
+    }
+    // Check diagonals
+    if (board[0][0] !== null && board[0][0] === board[1][1] && board[1][1] === board[2][2]) {
+        winner = board[0][0];
+    }
+    if (board[0][2] !== null && board[0][2] === board[1][1] && board[1][1] === board[2][0]) {
+        winner = board[0][2];
+    }
+    return winner;
+}
 
 server.listen(3000, () => {
     console.log("Listening on port 3000");

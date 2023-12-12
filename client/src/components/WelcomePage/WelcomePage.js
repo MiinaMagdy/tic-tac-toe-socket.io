@@ -11,19 +11,20 @@ function WelcomePage() {
     }
 
     socket.on("room created", (room) => {
-        navigate("/WaitingForOthers", {state: {room: room}});
+        socket.player = "X";
+        navigate("/WaitingForOthers", { state: { room: room } });
     });
 
     const joinGame = () => {
         navigate("/JoinGame");
     }
 
-  return (
-    <div className="WelcomePage">
-        <button onClick={newGame}>New Game</button>
-        <button onClick={joinGame}>Join Game</button>
-    </div>
-  );
+    return (
+        <div className="WelcomePage">
+            <button onClick={newGame}>New Game</button>
+            <button onClick={joinGame}>Join Game</button>
+        </div>
+    );
 }
 
 export default WelcomePage;

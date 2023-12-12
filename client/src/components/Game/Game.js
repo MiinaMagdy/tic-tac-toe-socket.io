@@ -21,39 +21,36 @@ function O() {
 }
 
 function Game() {
-    const { room } = useLocation().state;
-    const [board, setBoard] = React.useState([
-        [null, null, null],
-        [null, null, null],
-        [null, null, null],
-    ]);
-
+    // const { initialGameData } = useLocation().state;
+    const [gameData, setGameData] = React.useState(useLocation().state);
 
     function handleClick(row, col) {
-        if (!socket.inTurn) return;
-        if (board[row][col] === null) {
-            let newBoard = [...board];
-            newBoard[row][col] = socket.player;
-            setBoard(newBoard);
-            socket.emit("move", { room: room, board: newBoard });
+        if (gameData.currentPlayer !== socket.player) return;
+        if (gameData.board[row][col] === null) {
+            let newGameData = { ...gameData };
+            newGameData.board = [...gameData.board];
+            newGameData.board[row][col] = socket.player;
+            setGameData(newGameData);
+            socket.emit("move", newGameData);
         }
     }
 
     React.useEffect(() => {
-        socket.on("move", (data) => {
-            setBoard(data.board);
-            socket.inTurn = !socket.inTurn;
+        // console.log(initialGameData);
+        // setGameData(initialGameData);
+        socket.on("move", (newData) => {
+            setGameData(newData);
         });
-    }, []);
+    });
 
     return (
         <div className="game">
             <h1>Game</h1>
-            <p>Room code: {room}</p>
+            <p>Room code: {gameData.room}</p>
             <p>You Play with: {socket.player}</p>
-            <p>Turn: {socket.inTurn ? "Your Turn" : "Opponent's Turn"}</p>
+            <p>Turn: {gameData.currentPlayer === socket.player ? "Your Turn" : "Opponent's Turn"}</p>
             <div className="board">
-                {board.map((row, rowIndex) => (
+                {gameData.board.map((row, rowIndex) => (
                     <div className="row" key={rowIndex}>
                         {row.map((square, colIndex) => (
                             <div
