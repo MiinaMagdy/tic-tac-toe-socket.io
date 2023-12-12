@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { socket } from "../../Socket";
 import { useNavigate } from "react-router";
-
+import "./JoinGame.css";
 function JoinGame() {
     const navigate = useNavigate();
     const [room, setRoom] = useState("");

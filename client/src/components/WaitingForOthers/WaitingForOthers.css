@@ -1,0 +1,65 @@
+.waiting-for-others {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #292424;
+    background-image: url("../../images/back.jpg");
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: multiply;
+}
+
+.waiting-for-others h1 {
+    color: #fff;
+    font-size: 3rem;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px #fff;
+}
+
+.room-code {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 15px 25px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+.room-code p {
+    margin: 0 10px;
+}
+
+.waiting-for-others .room-code:hover {
+    transform: scale(1.05);
+    cursor: copy;
+}
+
+.waiting-for-others .room-code:active {
+    transform: scale(1);
+}
+
+.copied {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 5px 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    border-radius: 20px;
+    z-index: 2;
+}

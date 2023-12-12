@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { socket } from "../../Socket";
 import { useNavigate } from "react-router";
+import "./WaitingForOthers.css";
 
 function WaitingForOthers() {
   const { room } = useLocation().state;
@@ -30,8 +31,24 @@ function WaitingForOthers() {
 
   return (
     <div className="waiting-for-others">
-      <h1>Waiting for others...</h1>
-      <p>Room code: {room}</p>
+      <h1>Waiting for others</h1>
+      <div 
+        className="room-code"
+        onClick={() => {
+          navigator.clipboard.writeText(room);
+          const copied = document.querySelector(".copied");
+          copied.style.display = "block";
+          setTimeout(() => {
+            copied.style.display = "none";
+          }, 1000);
+        }}
+      >
+        <p>Room code:</p>
+        <p>{room}</p>
+      </div>
+      <div className="copied" style={{ display: "none" }}>
+        <p>Copied!</p>
+      </div>
     </div>
   );
 }

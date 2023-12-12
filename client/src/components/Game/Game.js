@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Game.css";
 import { socket } from "../../Socket";
 import { useLocation } from "react-router-dom";
+import "./Game.css";
 
 function X() {
     return (
@@ -46,10 +47,9 @@ function Game() {
 
     return (
         <div className="game">
-            <h1>Game</h1>
-            <p>Room code: {gameData.room}</p>
-            <p>You Play with: {socket.player}</p>
-            <p>Turn: {gameData.currentPlayer === socket.player ? "Your Turn" : "Opponent's Turn"}</p>
+            <h1>Tic Tac Toe</h1>
+            <p className="player">You are player: {socket.player}</p>
+            <p className="turn">Turn: {gameData.currentPlayer === socket.player ? "Your Turn" : "Opponent's Turn"}</p>
             <div className="board">
                 {gameData.board.map((row, rowIndex) => (
                     <div className="row" key={rowIndex}>

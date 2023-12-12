@@ -31,8 +31,18 @@ function WelcomePage() {
 
     return (
         <div className="WelcomePage">
-            <button onClick={newGame}>New Game</button>
-            <button onClick={joinGame}>Join Game</button>
+            <button 
+                onClick={newGame}
+                className="welcome-btn"
+            >
+                    New Game
+            </button>
+            <button
+                onClick={joinGame}
+                className="welcome-btn"
+            >
+                Join Game
+            </button>
         </div>
     );
 }
