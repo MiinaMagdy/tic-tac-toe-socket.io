@@ -131,16 +131,6 @@
     text-shadow: 0 0 5px #fff;
 }
 
-/*                         <button
-                            className="rematch"
-                            onClick={() => {
-                                socket.emit("play again");
-                                setGameOver(false);
-                            }}
-                        >
-                            Rematch
-                        </button>/
-                    */
 .rematch{
     border-radius: 5px;
     background: rgba(255, 255, 255, 0.2);

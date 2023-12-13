@@ -34,6 +34,11 @@ function Game() {
             setGameOver(true);
         });
 
+        socket.on("rematch", (newData) => {
+            setGameData(newData);
+            setGameOver(false);
+        });
+
         // Clean up on component unmount
         // return () => {
         //     socket.off("move");
@@ -79,8 +84,7 @@ function Game() {
                         <button
                             className="rematch"
                             onClick={() => {
-                                socket.emit("rematch");
-                                setGameOver(false);
+                                socket.emit("rematch", gameData.room);
                             }}
                         >
                             Rematch
