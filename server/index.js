@@ -54,6 +54,7 @@ io.on("connection", (socket) => {
         data.winner = checkWin(data.board);
         if (data.winner !== null) {
             console.log("Winner: ", data.winner);
+            data.currentPlayer = null;
             io.to(data.room).emit("game over", data);
             return;
         }
