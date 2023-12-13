@@ -87,7 +87,23 @@ function checkWin(board) {
     if (board[0][2] !== null && board[0][2] === board[1][1] && board[1][1] === board[2][0]) {
         winner = board[0][2];
     }
+
+    if (winner === null && checkDraw(board)) {
+        winner = "draw";
+    }
     return winner;
+}
+
+function checkDraw(board) {
+    let draw = true;
+    board.forEach(row => {
+        row.forEach(square => {
+            if (square === null) {
+                draw = false;
+            }
+        });
+    });
+    return draw;
 }
 
 server.listen(3000, () => {
