@@ -3,6 +3,16 @@ const app = express();
 
 const path = require("path");
 const http = require("http");
+
+
+app.use(express.static(path.join(__dirname, '../client/build')));
+
+// Handle other routes by serving the React app
+app.get('*', (req, res) => {
+    console.log("Serving React app...");
+    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+});
+
 const server = http.createServer(app);
 
 const { Server } = require("socket.io");
@@ -10,10 +20,6 @@ const io = new Server(server, {
     cors: {
         origin: "*",
     }
-});
-
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, "home.html"));
 });
 
 function createGameData(room) {
@@ -108,13 +114,6 @@ function checkDraw(board) {
     });
     return draw;
 }
-
-app.use(express.static(path.join(__dirname, 'client/build')));
-
-// Handle other routes by serving the React app
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-});
 
 server.listen(3000, () => {
     console.log("Listening on port 3000");
