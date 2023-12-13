@@ -28,6 +28,10 @@ function Game() {
             setGameData(newData);
         });
 
+        socket.on("game over", (newData) => {
+            setGameData(newData);
+        });
+
         // Clean up on component unmount
         // return () => {
         //     socket.off("move");
