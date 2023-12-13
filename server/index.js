@@ -61,6 +61,9 @@ io.on("connection", (socket) => {
         data.currentPlayer = data.currentPlayer === "X" ? "O" : "X";
         io.to(data.room).emit("move", data);
     });
+    socket.on("rematch", (room) => {
+        io.to(room).emit("rematch", createGameData(room));
+    });
     socket.on("disconnect", () => {
         console.log("A user disconnected");
     });
