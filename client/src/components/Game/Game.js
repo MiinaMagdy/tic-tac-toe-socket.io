@@ -22,6 +22,7 @@ function O() {
 function Game() {
     const locationState = useLocation().state;
     const [gameData, setGameData] = useState(locationState);
+    const [gameOver, setGameOver] = useState(false);
 
     useEffect(() => {
         socket.on("move", (newData) => {
@@ -30,6 +31,7 @@ function Game() {
 
         socket.on("game over", (newData) => {
             setGameData(newData);
+            setGameOver(true);
         });
 
         // Clean up on component unmount
@@ -69,6 +71,24 @@ function Game() {
                     </div>
                 ))}
             </div>
+            {
+                gameOver ?
+                    <div className="game-over" style={{ border: `5px solid ${gameData.winner === socket.player ? "green" : gameData.winner === "draw" ? "orange" : "red"}` }}>
+                        <p className="game-over-text">Game Over !</p>
+                        <p className="winner">{gameData.winner === socket.player ? "You Win!" : gameData.winner === "draw" ? "Draw!" : "You Lose"}</p>
+                        <button
+                            className="rematch"
+                            onClick={() => {
+                                socket.emit("rematch");
+                                setGameOver(false);
+                            }}
+                        >
+                            Rematch
+                        </button>
+
+                    </div>
+                    : null
+            }
         </div>
     );
 }
