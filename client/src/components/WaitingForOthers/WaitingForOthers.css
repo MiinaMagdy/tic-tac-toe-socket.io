@@ -18,6 +18,14 @@
     text-shadow: 0 0 10px #fff;
 }
 
+.room{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
 .room-code {
     display: flex;
     flex-direction: row;
