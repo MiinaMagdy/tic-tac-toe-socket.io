@@ -50,7 +50,7 @@ function WaitingForOthers() {
         </div>
         <WhatsappShareButton
           title={`Join my game of Tic Tac Toe! Room code: ${room}`}
-          url={`https://tec-tac-toe.onrender.com/`}
+          url={`https://tic-tic-tic.onrender.com`}
         >
           <WhatsappIcon size={32} round={true} />
         </WhatsappShareButton>
