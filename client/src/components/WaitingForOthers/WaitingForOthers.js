@@ -21,7 +21,7 @@ function WaitingForOthers() {
     return () => {
       socket.emit('left waiting', room);
     };
-  }, []);
+  }, [room]);
 
   useEffect(() => {
     // Navigate when gameData is updated

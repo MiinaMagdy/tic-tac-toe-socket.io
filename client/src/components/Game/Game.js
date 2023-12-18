@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./Game.css";
 import { socket } from "../../Socket";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "./Game.css";
 
 function X() {
@@ -23,6 +25,19 @@ function Game() {
     const locationState = useLocation().state;
     const [gameData, setGameData] = useState(locationState);
     const [gameOver, setGameOver] = useState(false);
+    const [rematchClicked, setRematchClicked] = useState(false);
+    const [friendAsked, setFriendAsked] = useState(false);
+    const navigate = useNavigate();
+    const Notify = (message, type) => {
+        toast(message, {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          type: type,
+        });
+    };
 
     useEffect(() => {
         socket.on("move", (newData) => {
@@ -37,13 +52,31 @@ function Game() {
         socket.on("rematch", (newData) => {
             setGameData(newData);
             setGameOver(false);
+            setRematchClicked(false);
+            setFriendAsked(false);
         });
 
-        // Clean up on component unmount
-        return () => {
-            socket.emit('destroy game', gameData.room);
-        };
-    }, []);
+        socket.on("play again", () => {
+            setFriendAsked(true);
+        });
+
+        socket.on("destroy game", () => {
+            navigate("/");
+            Notify("Your friend refused to play again", "info");
+        });
+
+    }, [navigate]);
+
+    // useEffect for destroy game
+    // useEffect(() => {
+    //     socket.on("destroy game", () => {
+    //         navigate("/");
+    //     });
+    //     return () => {
+    //        socket.emit("destroy game", gameData.room);
+    //     };
+    // }, [gameData, navigate, gameOver]);
+
 
     function handleClick(row, col) {
         if (gameData.currentPlayer !== socket.player) return;
@@ -81,14 +114,39 @@ function Game() {
                     <div className="game-over" style={{ border: `5px solid ${gameData.winner === socket.player ? "green" : gameData.winner === "draw" ? "orange" : "red"}` }}>
                         <p className="game-over-text">Game Over !</p>
                         <p className="winner">{gameData.winner === socket.player ? "You Win!" : gameData.winner === "draw" ? "Draw!" : "You Lose"}</p>
-                        <button
-                            className="rematch"
-                            onClick={() => {
-                                socket.emit("rematch", gameData.room);
-                            }}
-                        >
-                            Rematch
-                        </button>
+                        {
+                            friendAsked ?
+                                <div className="friend-asked">
+                                    <p className="friend-asked-title">Your friend want to play again, do you want to play?</p>
+                                    <button className="ok-rematch" onClick={() => {
+                                        socket.emit("ok rematch", gameData.room); 
+                                        }}>
+                                            YES
+                                    </button>
+                                    <button className="no-rematch" onClick={() => {
+                                        socket.emit("destroy game", gameData.room);
+                                        navigate("/");
+                                        }
+                                    }>
+                                        NO
+                                    </button>
+                                </div>
+                            :
+                                rematchClicked ? 
+                                    <p className="rematch-clicked-title">
+                                        waiting for Your friend
+                                    </p>
+                                :
+                                    <button
+                                        className="rematch"
+                                        onClick={() => {
+                                            socket.emit("play again", gameData.room);
+                                            setRematchClicked(true);
+                                        }}
+                                    >
+                                        Rematch
+                                    </button>
+                        }
 
                     </div>
                     : null

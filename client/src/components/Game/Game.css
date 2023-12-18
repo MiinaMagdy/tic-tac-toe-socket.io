@@ -103,13 +103,13 @@
 
 .game-over{
     position: absolute;
-    top: 50%;
+    top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
     background: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
-    width: 400px;
-    height: 400px;
+    width: 320px;
+    height: 450px;
     border-radius: 50px;
     display: flex;
     flex-direction: column;
@@ -151,4 +151,62 @@
 
 .rematch:active{
     transform: scale(1);
+}
+
+.friend-asked-title{
+    color: #fff;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    text-shadow: 0 0 5px #fff;
+}
+
+.ok-rematch{
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 15px 25px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 10px;
+    border: none;
+}
+
+.no-rematch{
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 15px 25px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 10px;
+    border: none;
+}
+
+.ok-rematch:hover{
+    transform: scale(1.05);
+}
+
+.ok-rematch:active{
+    transform: scale(1);
+}
+
+.no-rematch:hover{
+    transform: scale(1.05);
+}
+
+.no-rematch:active{
+    transform: scale(1);
+}
+
+.rematch-clicked-title{
+    color: #fff;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    text-shadow: 0 0 5px #fff;
 }
