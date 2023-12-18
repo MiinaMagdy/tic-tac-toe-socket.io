@@ -2,9 +2,21 @@ import React, { useEffect, useState } from "react";
 import { socket } from "../../Socket";
 import { useNavigate } from "react-router";
 import "./JoinGame.css";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function JoinGame() {
     const navigate = useNavigate();
     const [room, setRoom] = useState("");
+    const Notify = (message, type) => {
+        toast(message, {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          type: type,
+        });
+    };
 
     useEffect(() => {
         const handleRoomJoined = () => {
@@ -18,6 +30,10 @@ function JoinGame() {
         // Set up socket event listeners
         socket.on("room joined", handleRoomJoined);
         socket.on("start game", handleStartGame);
+        socket.on("room not found", () => {
+            console.log("Room not found");
+            Notify("Room not found", "error");
+        });
 
         // Clean up on component unmount
         // return () => {
@@ -27,7 +43,7 @@ function JoinGame() {
     }, [navigate]);
 
     const joinGame = () => {
-        console.log(room);
+        
         socket.emit("join game", room);
     }
 

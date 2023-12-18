@@ -4,6 +4,7 @@ import JoinGame from './components/JoinGame/JoinGame';
 import WaitingForOthers from './components/WaitingForOthers/WaitingForOthers';
 import Game from './components/Game/Game';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 function App() {
   return (
     <div className="App">
@@ -15,6 +16,7 @@ function App() {
           <Route path="/Game" element={<Game />} />
         </Routes>
       </Router>
+      <ToastContainer />
     </div>
   );
 }
