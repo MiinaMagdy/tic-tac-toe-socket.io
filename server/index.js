@@ -71,7 +71,7 @@ io.on("connection", (socket) => {
         rooms = rooms.filter(r => r !== room);
     })
     socket.on("play again", (room) => { // "play again" button rematch, 
-        socket.to(room).emit("play again", createGameData(room));
+        socket.to(room).emit("play again");
     });
     socket.on("ok rematch", (room) => { // emit "ok rematch"
         io.to(room).emit("rematch", createGameData(room));
