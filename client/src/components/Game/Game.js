@@ -40,9 +40,9 @@ function Game() {
         });
 
         // Clean up on component unmount
-        // return () => {
-        //     socket.off("move");
-        // };
+        return () => {
+            socket.emit('destroy game', gameData.room);
+        };
     }, []);
 
     function handleClick(row, col) {

@@ -33,7 +33,7 @@ function createGameData(room) {
 let rooms = [];
 
 io.on("connection", (socket) => {
-    console.log("A user connected");
+    console.log("A user connected: ", socket.id);
     socket.on("new game", () => {
         let room = Math.floor(Math.random() * 1000000);
         rooms[room] = createGameData(room);
@@ -67,8 +67,17 @@ io.on("connection", (socket) => {
         data.currentPlayer = data.currentPlayer === "X" ? "O" : "X";
         io.to(data.room).emit("move", data);
     });
-    socket.on("rematch", (room) => {
+    socket.on('left waiting', room => {
+        rooms = rooms.filter(r => r !== room);
+    })
+    socket.on("play again", (room) => { // "play again" button rematch, 
+        socket.to(room).emit("play again", createGameData(room));
+    });
+    socket.on("ok rematch", (room) => { // emit "ok rematch"
         io.to(room).emit("rematch", createGameData(room));
+    });
+    socket.on("destroy game", (room) => {
+        socket.to(room).emit("destroy game", room);
     });
     socket.on("disconnect", () => {
         console.log("A user disconnected");

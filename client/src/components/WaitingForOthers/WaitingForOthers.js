@@ -18,9 +18,9 @@ function WaitingForOthers() {
     socket.on("start game", handleStartGame);
 
     // Clean up on component unmount
-    // return () => {
-    //   socket.off("start game", handleStartGame);
-    // };
+    return () => {
+      socket.emit('left waiting', room);
+    };
   }, []);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ function WaitingForOthers() {
     <div className="waiting-for-others">
       <h1>Waiting for others</h1>
       <div className="room">
-        <div 
+        <div
           className="room-code"
           onClick={() => {
             navigator.clipboard.writeText(room);
