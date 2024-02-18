@@ -1,5 +1,5 @@
 # Tic Tic Tic
-Tic Tic Tic is 2-players tic tac toe game and you can invite your firends via WhatsApp.
+Tic Tic Tic is 2-players tic-tac-toe game, and you can invite your friends via WhatsApp.
 
 ## 🚀 Quick Start
 Go to [tic-tic-tic](https://tic-tic-tic.onrender.com/) and click `New Game` to invite your friend,
